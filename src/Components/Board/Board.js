@@ -16,29 +16,47 @@ const initialBoardState = [
 const Board = () => {
   const [boardState, setBoardState] = useState(initialBoardState);
   const [playerTurn, setPlayerTurn] = useState("black");
+  const [count, setCount] = useState(0);
 
-  const showLegalMoves = (event, y, x) => {
+  const clickHandler = (event, y, x) => {
     event.preventDefault();
+    // console.log("hello")
+    showLegalMoves(y, x)
+    
+
+    // if (boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPiece";
+
+  }
+
+  const showLegalMoves = (x, y) => {
     const boardStateCopy = JSON.parse(JSON.stringify(boardState))
     const boardLength = boardStateCopy.length;
     const boardWidth = boardStateCopy[0].length;
 
-    if (x < boardWidth - 1  && y < boardLength - 1 && boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
-    if (x > 0 && y < boardLength - 1 && boardStateCopy[y + 1][x - 1] === "black") boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
-    console.log(boardStateCopy)
+    while (count < 2 && playerTurn === "black" && x <= boardWidth - 1 && y < boardLength - 1) {
+      if ((boardStateCopy[y + 1][x + 1]) && boardStateCopy[y + 1][x + 1] === "black") {
+        console.log("clicked")
+        boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
 
-    setBoardState(boardStateCopy)
-    // if (boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPiece";
+      }
+      if (boardStateCopy[y + 1][x - 1] === "black") boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
+      if (boardStateCopy[y + 1][x + 1] === "redPiece") {
+        setCount(count += 1)
+        showLegalMoves(y + 1, x + 1);
+      }
+      if (x > 0 && y < boardLength - 1 && boardStateCopy[y + 1][x - 1] === "black") boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
 
-
-
+      setBoardState(boardStateCopy);
+    }
+    setCount(count = 0);
+    return boardStateCopy;
   }
 
   return (
     <div className="BoardContainer">
       {boardState.map((cell, index) =>
       {
-      return <BoardRow key={"Row" + index} rowState={cell} yindex={index} showLegalMoves={showLegalMoves} />
+      return <BoardRow key={"Row" + index} rowState={cell} yindex={index} clickHandler={clickHandler} />
       })}
     </div>
   );

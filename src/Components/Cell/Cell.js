@@ -2,7 +2,7 @@ import React from "react";
 import "./Cell.css";
 
 const Cell = props => {
-  const { cellState, xindex, yindex, showLegalMoves } = props;
+  const { cellState, xindex, yindex, clickHandler } = props;
 
   const getCell = str => {
     switch (str) {
@@ -15,7 +15,7 @@ const Cell = props => {
           <div className={cellState}>
             <div
               className={"blackCircle"}
-              onClick={(event, x, y) => showLegalMoves(event, yindex, xindex)}
+              onClick={(event, x, y) => clickHandler(event, yindex, xindex)}
             />
           </div>
         );
