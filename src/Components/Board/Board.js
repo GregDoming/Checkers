@@ -15,14 +15,18 @@ const initialBoardState = [
 
 const Board = () => {
   const [boardState, setBoardState] = useState(initialBoardState);
-  const [playerTurn, setPlayerTurn] = useState("red");
+  const [playerTurn, setPlayerTurn] = useState("black");
 
   const showLegalMoves = (event, y, x) => {
     event.preventDefault();
     const boardStateCopy = JSON.parse(JSON.stringify(boardState))
-    console.log(boardStateCopy.length)
+    const boardLength = boardStateCopy.length;
+    const boardWidth = boardStateCopy[0].length;
 
-    if ( x < boardStateCopy.length - 1  && y < boardStateCopy.length - 1 && boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPiece";
+    if (x < boardWidth - 1  && y < boardLength - 1 && boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
+    if (x > 0 && y < boardLength - 1 && boardStateCopy[y + 1][x - 1] === "black") boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
+    console.log(boardStateCopy)
+
     setBoardState(boardStateCopy)
     // if (boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPiece";
 
