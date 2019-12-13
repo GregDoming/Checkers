@@ -15,12 +15,26 @@ const initialBoardState = [
 
 const Board = () => {
   const [boardState, setBoardState] = useState(initialBoardState);
+  const [playerTurn, setPlayerTurn] = useState("red");
+
+  const showLegalMoves = (event, y, x) => {
+    event.preventDefault();
+    const boardStateCopy = JSON.parse(JSON.stringify(boardState))
+    console.log(boardStateCopy.length)
+
+    if ( x < boardStateCopy.length - 1  && y < boardStateCopy.length - 1 && boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPiece";
+    setBoardState(boardStateCopy)
+    // if (boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPiece";
+
+
+
+  }
 
   return (
     <div className="BoardContainer">
       {boardState.map((cell, index) =>
       {
-      return <BoardRow key={"Row" + index} rowState={cell} rowIndex={index} />
+      return <BoardRow key={"Row" + index} rowState={cell} yindex={index} showLegalMoves={showLegalMoves} />
       })}
     </div>
   );
