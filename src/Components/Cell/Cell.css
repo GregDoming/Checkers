@@ -1,0 +1,68 @@
+.white {
+  outline: solid 2px black;
+  background-color: white;
+  flex: 1 0 auto;
+
+}
+
+.white:before {
+  content:'';
+  float:left;
+  padding-top:100%;
+}
+
+.black {
+  outline: solid 2px black;
+  background-color: grey;
+  flex: 1 0 auto;
+}
+
+.black:before {
+  content:'';
+  float:left;
+  padding-top:100%;
+}
+
+.blackPiece {
+  display: flex;
+  outline: solid 2px black;
+  background-color: grey;
+  flex: 1 0 auto;
+}
+
+.blackPiece:before {
+  content:'';
+  float:left;
+  padding-top:100%;
+}
+
+.blackCircle {
+  background-color: black;
+  margin: auto;
+  outline: black;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+}
+
+.redPiece {
+  display: flex;
+  outline: solid 2px black;
+  background-color: grey;
+  flex: 1 0 auto;
+
+}
+
+.redPiece:before {
+  content:'';
+  float:left;
+  padding-top:100%;
+}
+
+.redSquare {
+  margin: auto;
+  background-color: red;
+  outline: black;
+  width: 75%;
+  height: 75%; 
+}

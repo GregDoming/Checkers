@@ -1,0 +1,7 @@
+.BoardRowContainer {
+  display: flex;
+  flex-flow: row;
+  align-items: stretch;
+  flex-wrap: "noWrap";
+  justify-content: stretch
+}

@@ -1,8 +1,9 @@
 .BoardContainer {
   display: flex;
-  outline: black solid 2px;
+  flex-flow: column;
   width: 30vw;
-  height: 30vw;
-  overflow: hidden;
+  height: 10vh;
   margin-top: 15vh;
+  border: black;
+  padding: 0
 }
