@@ -6,7 +6,7 @@ const initialBoardState = [
   ["white", "blackPiece", "white", "blackPiece", "white", "blackPiece", "white", "blackPiece"],
   ["blackPiece", "white", "blackPiece", "white", "blackPiece", "white", "blackPiece", "white"],
   ["white", "blackPiece", "white", "blackPiece", "white", "blackPiece", "white", "blackPiece"],
-  ["black", "white", "black", "white", "black", "white", "black", "white"],
+  ["black", "white", "black", "white", "redPiece", "white", "black", "white"],
   ["white", "black", "white", "black", "white", "black", "white", "black"],
   ["redPiece", "white", "redPiece", "white", "redPiece", "white", "redPiece", "white"],
   ["white", "redPiece", "white", "redPiece", "white", "redPiece", "white", "redPiece"],
@@ -16,47 +16,72 @@ const initialBoardState = [
 const Board = () => {
   const [boardState, setBoardState] = useState(initialBoardState);
   const [playerTurn, setPlayerTurn] = useState("black");
-  const [count, setCount] = useState(0);
 
   const clickHandler = (event, y, x) => {
     event.preventDefault();
-    // console.log("hello")
-    showLegalMoves(y, x)
-    
 
-    // if (boardStateCopy[y + 1][x + 1] === "black") boardStateCopy[y + 1][x + 1] = "blackPiece";
+    showLegalMoves(y, x);
+  };
 
-  }
-
-  const showLegalMoves = (x, y) => {
-    const boardStateCopy = JSON.parse(JSON.stringify(boardState))
-    const boardLength = boardStateCopy.length;
-    const boardWidth = boardStateCopy[0].length;
-
-    while (count < 2 && playerTurn === "black" && x <= boardWidth - 1 && y < boardLength - 1) {
-      if ((boardStateCopy[y + 1][x + 1]) && boardStateCopy[y + 1][x + 1] === "black") {
-        console.log("clicked")
-        boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
-
-      }
-      if (boardStateCopy[y + 1][x - 1] === "black") boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
-      if (boardStateCopy[y + 1][x + 1] === "redPiece") {
-        setCount(count += 1)
-        showLegalMoves(y + 1, x + 1);
-      }
-      if (x > 0 && y < boardLength - 1 && boardStateCopy[y + 1][x - 1] === "black") boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
-
-      setBoardState(boardStateCopy);
+  const changeTurn = () => {
+    if (playerTurn === "black") {
+      setPlayerTurn("red");
+    } else {
+      setPlayerTurn("black");
     }
-    setCount(count = 0);
-    return boardStateCopy;
-  }
+  };
+  
+  
+
+
+  const showLegalMoves = (y, x) => {
+    const boardStateCopy = JSON.parse(JSON.stringify(boardState));
+    const goingRight = true;
+
+    let count = 0;
+    let direction = "neutral"
+
+    const closure = (y, x) => {
+      if (boardStateCopy[y + 1][x + 1] && y < 7 && boardStateCopy[y + 1][x + 1] === "black" && direction !== "left") {
+        boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
+      };
+      
+      if (boardStateCopy[y + 1][x - 1] && y < 7 && boardStateCopy[y + 1][x - 1] === "black" && direction !== "right") {
+        boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
+      };
+
+      if (boardStateCopy[y + 1][x + 1] === "redPiece") {
+        count += 1;
+        direction = "right";
+        closure(y + 1, x + 1);
+      };
+
+      if (boardStateCopy[y + 1][x - 1] === "redPiece") {
+        count += 1;
+        direction = "right";
+        closure(y + 1, x + 1);
+      };
+      
+      changeTurn();
+      return;
+    };
+
+    closure(y, x);
+    setBoardState(boardStateCopy);
+  };
 
   return (
     <div className="BoardContainer">
-      {boardState.map((cell, index) =>
-      {
-      return <BoardRow key={"Row" + index} rowState={cell} yindex={index} clickHandler={clickHandler} />
+      <h1>{playerTurn}</h1>
+      {boardState.map((cell, index) => {
+        return (
+          <BoardRow
+            key={"Row" + index}
+            rowState={cell}
+            yindex={index}
+            clickHandler={clickHandler}
+          />
+        );
       })}
     </div>
   );
