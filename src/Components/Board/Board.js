@@ -281,9 +281,12 @@ const Board = () => {
 
   return (
     <div tabIndex="0" className="BoardContainer" onKeyDown={event => moveHandler(event)}>
-      <h1>{playerTurn}</h1>
+      {!duringTurn ? (
+        <h2>Click {playerTurn} Piece to Move</h2>
+      ) : (
+        <h2>Move Piece with Left Arrow or Right Arrow</h2>
+      )}
       <button onClick={event => handleResetPress(event)}>Reset</button>
-
       {/* <h2>{currentBlackPos["y"]}</h2> */}
       {boardState.map((cell, index) => {
         return (
