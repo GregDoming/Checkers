@@ -3,8 +3,6 @@ const path = require('path');
 const app = express();
 const mongoose = require("mongoose");
 
-const User = require('/db');
-
 const PORT = process.env.PORT || 5000;
 
 const mongooseOptions = {
