@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BoardRow from "../BoardRow/BoardRow";
 import "./Board.css";
 import { inheritInnerComments } from "@babel/types";
@@ -33,6 +33,80 @@ const Board = () => {
     }
   };
 
+  const replaceGreyPieces = (arr) => {
+    const newArr = arr.map((ele) => {
+      for (let i = 0; i < ele.length; i++) {
+        if (ele[i] === "blackPieceCheck" || ele[i] === "redPieceCheck"){
+          ele[i] = "black"
+        } 
+      }
+      return ele;
+    })
+    return newArr
+  }
+
+  // const moveHandler = useCallback(event => {
+  //   const { keyCode } = event;
+  //   const boardStateCopy = JSON.parse(JSON.stringify(boardState));
+  //   if (
+  //     duringTurn &&
+  //     keyCode === 37 &&
+  //     boardState[currentBlackYPos + 1][currentBlackXPos - 1] === "blackPieceCheck"
+  //   ) {
+  //     if (boardState[currentBlackYPos + 1][currentBlackXPos + 1] === "blackPieceCheck")
+  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "black";
+  //     boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "blackPiece";
+  //   }
+
+  //   if (
+  //     duringTurn &&
+  //     keyCode === 37 &&
+  //     boardState[currentBlackYPos + 2][currentBlackXPos - 2] === "blackPieceCheck"
+  //   ) {
+  //     if (boardState[currentBlackYPos + 2][currentBlackXPos + 2] === "blackPieceCheck")
+  //     boardStateCopy[currentBlackYPos + 2][currentBlackXPos + 2] = "black";
+  //     boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "black";
+  //     boardStateCopy[currentBlackYPos + 2][currentBlackXPos - 2] = "blackPiece";
+  //   }
+
+  //   if (
+  //     duringTurn &&
+  //     keyCode === 39 &&
+  //     boardState[currentBlackYPos + 1][currentBlackXPos + 1] === "blackPieceCheck"
+  //   ) {
+  //     if (boardState[currentBlackYPos + 1][currentBlackXPos - 1] === "blackPieceCheck")
+  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "black";
+  //     boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "blackPiece";
+  //   }
+
+  //   if (
+  //     duringTurn &&
+  //     keyCode === 39 &&
+  //     boardState[currentBlackYPos + 2][currentBlackXPos + 2] === "blackPieceCheck"
+  //   ) {
+  //     if (
+  //       boardState[currentBlackYPos + 2][currentBlackXPos - 2] &&
+  //       boardState[currentBlackYPos + 2][currentBlackXPos - 2] === "blackPieceCheck"
+  //     )
+  //     boardStateCopy[currentBlackYPos + 2][currentBlackXPos - 2] = "black";
+  //     boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "black";
+  //     boardStateCopy[currentBlackYPos + 2][currentBlackXPos + 2] = "blackPiece";
+  //   }
+  //   setBoardState(boardStateCopy);
+  // }, []);
+
+  // useEffect(() => {
+  //   window.addEventListener('keydown', handleUserKeyPress);
+
+  //   return () => {
+  //     window.removeEventListener('keydown', handleUserKeyPress);
+  //   };
+  // }, [handleUserKeyPress]);
+
   const moveHandler = event => {
     const boardStateCopy = JSON.parse(JSON.stringify(boardState));
 
@@ -41,52 +115,48 @@ const Board = () => {
       event.keyCode === 37 &&
       boardState[currentBlackYPos + 1][currentBlackXPos - 1] === "blackPieceCheck"
     ) {
-      if (boardState[currentBlackYPos + 1][currentBlackXPos + 1] === "blackPieceCheck")
-        boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "black";
       boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
       boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "blackPiece";
-    }
+    };
 
     if (
       duringTurn &&
       event.keyCode === 37 &&
       boardState[currentBlackYPos + 2][currentBlackXPos - 2] === "blackPieceCheck"
     ) {
-      if (boardState[currentBlackYPos + 2][currentBlackXPos + 2] === "blackPieceCheck")
-        boardStateCopy[currentBlackYPos + 2][currentBlackXPos + 2] = "black";
       boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
       boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "black";
       boardStateCopy[currentBlackYPos + 2][currentBlackXPos - 2] = "blackPiece";
-    }
+    };
 
     if (
       duringTurn &&
       event.keyCode === 39 &&
       boardState[currentBlackYPos + 1][currentBlackXPos + 1] === "blackPieceCheck"
     ) {
-      if (boardState[currentBlackYPos + 1][currentBlackXPos - 1] === "blackPieceCheck")
-        boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "black";
       boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
       boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "blackPiece";
-    }
+    };
 
     if (
       duringTurn &&
       event.keyCode === 39 &&
       boardState[currentBlackYPos + 2][currentBlackXPos + 2] === "blackPieceCheck"
     ) {
-      if (
-        boardState[currentBlackYPos + 2][currentBlackXPos - 2] &&
-        boardState[currentBlackYPos + 2][currentBlackXPos - 2] === "blackPieceCheck"
-      )
-        boardStateCopy[currentBlackYPos + 2][currentBlackXPos - 2] = "black";
-      boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
       boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "black";
       boardStateCopy[currentBlackYPos + 2][currentBlackXPos + 2] = "blackPiece";
-    }
-    setBoardState(boardStateCopy);
-    console.log(boardState);
+    };
+    
+    setBoardState(replaceGreyPieces(boardStateCopy));
   };
+
+  useEffect(() => {
+    window.addEventListener("onKeyDown", moveHandler);
+
+    return () => {
+      window.removeEventListener("onKeyDown", moveHandler);
+    };
+  }, []);
 
   const moveSelectedPiece = (x, y) => {};
 
@@ -175,7 +245,6 @@ const Board = () => {
             rowState={cell}
             yindex={index}
             clickHandler={clickHandler}
-            onKeyDown={event => moveHandler(event)}
           />
         );
       })}
