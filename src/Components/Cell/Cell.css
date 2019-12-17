@@ -86,6 +86,23 @@
   padding-top:100%;
 }
 
+.redPieceCheck {
+  display: flex;
+  outline: solid 2px black;
+  background-color: grey;
+  flex: 1 0 auto;
+}
+
+.redPieceCheck:before {
+  content:'';
+  float:left;
+  padding-top:100%;
+}
+
+.redSquarecheck:hover {
+  opacity: 1;
+}
+
 .redSquare {
   margin: auto;
   background-color: red;
@@ -93,3 +110,14 @@
   width: 75%;
   height: 75%; 
 }
+
+.redSquareCheck {
+  display: flex;
+  margin: auto;
+  background-color: red;
+  outline: black;
+  width: 75%;
+  height: 75%; 
+  opacity: .5;
+}
+

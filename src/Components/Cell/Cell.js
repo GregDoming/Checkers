@@ -22,18 +22,24 @@ const Cell = props => {
       case "blackPieceCheck":
         return (
           <div className={cellState}>
-            <div
-              className={"blackCircleCheck"}
-            />
+            <div className={"blackCircleCheck"} />
           </div>
         );
       case "redPiece":
         return (
           <div className={cellState}>
-            <div className={"redSquare"} />
+            <div
+              className={"redSquare"}
+              onClick={(event, x, y) => clickHandler(event, yindex, xindex)}
+            />
           </div>
         );
-
+      case "redPieceCheck":
+        return (
+          <div className={cellState}>
+            <div className={"redSquareCheck"} />
+          </div>
+        );
       default:
         break;
     }

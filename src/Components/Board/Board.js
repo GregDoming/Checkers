@@ -7,21 +7,19 @@ const initialBoardState = [
   ["white", "blackPiece", "white", "blackPiece", "white", "blackPiece", "white", "blackPiece"],
   ["blackPiece", "white", "blackPiece", "white", "blackPiece", "white", "blackPiece", "white"],
   ["white", "blackPiece", "white", "blackPiece", "white", "blackPiece", "white", "blackPiece"],
-  ["black", "white", "black", "white", "redPiece", "white", "redPiece", "white"],
+  ["black", "white", "black", "white", "black", "white", "black", "white"],
   ["white", "black", "white", "black", "white", "black", "white", "black"],
   ["redPiece", "white", "redPiece", "white", "redPiece", "white", "redPiece", "white"],
-  ["white", "redPiece", "white", "black", "white", "black", "white", "black"],
+  ["white", "redPiece", "white", "redPiece", "white", "redPiece", "white", "redPiece"],
   ["redPiece", "white", "redPiece", "white", "redPiece", "white", "redPiece", "white"]
 ];
 
 const Board = () => {
   const [boardState, setBoardState] = useState(initialBoardState);
-  const [playerTurn, setPlayerTurn] = useState("black");
+  const [playerTurn, setPlayerTurn] = useState("red");
   const [duringTurn, setDuringTurn] = useState(false);
   const [currentBlackXPos, setCurrentBlackXPos] = useState(-1);
   const [currentBlackYPos, setCurrentBlackYPos] = useState(-1);
-
-  const [currentRedPos, setCurrentRedPosition] = useState({ x: -1, y: 0 });
 
   const clickHandler = (event, yCord, xCord) => {
     event.preventDefault();
@@ -31,123 +29,115 @@ const Board = () => {
       showMoves(yCord, xCord);
       setDuringTurn(true);
     }
+
+    if (playerTurn === "red" && boardState[yCord][xCord] === "redPiece" && !duringTurn) {
+      setCurrentBlackXPos(xCord);
+      setCurrentBlackYPos(yCord);
+      showMoves(yCord, xCord);
+      setDuringTurn(true);
+    }
   };
 
-  const replaceGreyPieces = (arr) => {
-    const newArr = arr.map((ele) => {
+  const replaceGreyPieces = arr => {
+    const newArr = arr.map(ele => {
       for (let i = 0; i < ele.length; i++) {
-        if (ele[i] === "blackPieceCheck" || ele[i] === "redPieceCheck"){
-          ele[i] = "black"
-        } 
+        if (ele[i] === "blackPieceCheck" || ele[i] === "redPieceCheck") {
+          ele[i] = "black";
+        }
       }
       return ele;
-    })
-    return newArr
-  }
-
-  // const moveHandler = useCallback(event => {
-  //   const { keyCode } = event;
-  //   const boardStateCopy = JSON.parse(JSON.stringify(boardState));
-  //   if (
-  //     duringTurn &&
-  //     keyCode === 37 &&
-  //     boardState[currentBlackYPos + 1][currentBlackXPos - 1] === "blackPieceCheck"
-  //   ) {
-  //     if (boardState[currentBlackYPos + 1][currentBlackXPos + 1] === "blackPieceCheck")
-  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "black";
-  //     boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
-  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "blackPiece";
-  //   }
-
-  //   if (
-  //     duringTurn &&
-  //     keyCode === 37 &&
-  //     boardState[currentBlackYPos + 2][currentBlackXPos - 2] === "blackPieceCheck"
-  //   ) {
-  //     if (boardState[currentBlackYPos + 2][currentBlackXPos + 2] === "blackPieceCheck")
-  //     boardStateCopy[currentBlackYPos + 2][currentBlackXPos + 2] = "black";
-  //     boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
-  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "black";
-  //     boardStateCopy[currentBlackYPos + 2][currentBlackXPos - 2] = "blackPiece";
-  //   }
-
-  //   if (
-  //     duringTurn &&
-  //     keyCode === 39 &&
-  //     boardState[currentBlackYPos + 1][currentBlackXPos + 1] === "blackPieceCheck"
-  //   ) {
-  //     if (boardState[currentBlackYPos + 1][currentBlackXPos - 1] === "blackPieceCheck")
-  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "black";
-  //     boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
-  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "blackPiece";
-  //   }
-
-  //   if (
-  //     duringTurn &&
-  //     keyCode === 39 &&
-  //     boardState[currentBlackYPos + 2][currentBlackXPos + 2] === "blackPieceCheck"
-  //   ) {
-  //     if (
-  //       boardState[currentBlackYPos + 2][currentBlackXPos - 2] &&
-  //       boardState[currentBlackYPos + 2][currentBlackXPos - 2] === "blackPieceCheck"
-  //     )
-  //     boardStateCopy[currentBlackYPos + 2][currentBlackXPos - 2] = "black";
-  //     boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
-  //     boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "black";
-  //     boardStateCopy[currentBlackYPos + 2][currentBlackXPos + 2] = "blackPiece";
-  //   }
-  //   setBoardState(boardStateCopy);
-  // }, []);
-
-  // useEffect(() => {
-  //   window.addEventListener('keydown', handleUserKeyPress);
-
-  //   return () => {
-  //     window.removeEventListener('keydown', handleUserKeyPress);
-  //   };
-  // }, [handleUserKeyPress]);
+    });
+    return newArr;
+  };
 
   const moveHandler = event => {
     const boardStateCopy = JSON.parse(JSON.stringify(boardState));
+    if (playerTurn === "black") {
+      if (
+        duringTurn &&
+        event.keyCode === 37 &&
+        boardState[currentBlackYPos + 1][currentBlackXPos - 1] === "blackPieceCheck"
+      ) {
+        boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+        boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "blackPiece";
+      }
 
-    if (
-      duringTurn &&
-      event.keyCode === 37 &&
-      boardState[currentBlackYPos + 1][currentBlackXPos - 1] === "blackPieceCheck"
-    ) {
-      boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
-      boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "blackPiece";
-    };
+      if (
+        duringTurn &&
+        event.keyCode === 37 &&
+        boardState[currentBlackYPos + 2][currentBlackXPos - 2] === "blackPieceCheck"
+      ) {
+        boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+        boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "black";
+        boardStateCopy[currentBlackYPos + 2][currentBlackXPos - 2] = "blackPiece";
+      }
 
-    if (
-      duringTurn &&
-      event.keyCode === 37 &&
-      boardState[currentBlackYPos + 2][currentBlackXPos - 2] === "blackPieceCheck"
-    ) {
-      boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
-      boardStateCopy[currentBlackYPos + 1][currentBlackXPos - 1] = "black";
-      boardStateCopy[currentBlackYPos + 2][currentBlackXPos - 2] = "blackPiece";
-    };
+      if (
+        duringTurn &&
+        event.keyCode === 39 &&
+        boardState[currentBlackYPos + 1][currentBlackXPos + 1] === "blackPieceCheck"
+      ) {
+        boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+        boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "blackPiece";
+      }
 
-    if (
-      duringTurn &&
-      event.keyCode === 39 &&
-      boardState[currentBlackYPos + 1][currentBlackXPos + 1] === "blackPieceCheck"
-    ) {
-      boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
-      boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "blackPiece";
-    };
+      if (
+        duringTurn &&
+        event.keyCode === 39 &&
+        boardState[currentBlackYPos + 2][currentBlackXPos + 2] === "blackPieceCheck"
+      ) {
+        boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+        boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "black";
+        boardStateCopy[currentBlackYPos + 2][currentBlackXPos + 2] = "blackPiece";
+      }
+      setBoardState(replaceGreyPieces(boardStateCopy));
+      setDuringTurn(false);
+      setPlayerTurn("red");
+    } else if (playerTurn === "red") {
+      if (
+        duringTurn &&
+        event.keyCode === 37 &&
+        boardState[currentBlackYPos - 1][currentBlackXPos - 1] === "redPieceCheck"
+      ) {
+        boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+        boardStateCopy[currentBlackYPos - 1][currentBlackXPos - 1] = "redPiece";
+      }
 
-    if (
-      duringTurn &&
-      event.keyCode === 39 &&
-      boardState[currentBlackYPos + 2][currentBlackXPos + 2] === "blackPieceCheck"
-    ) {
-      boardStateCopy[currentBlackYPos + 1][currentBlackXPos + 1] = "black";
-      boardStateCopy[currentBlackYPos + 2][currentBlackXPos + 2] = "blackPiece";
-    };
-    
-    setBoardState(replaceGreyPieces(boardStateCopy));
+      if (
+        duringTurn &&
+        event.keyCode === 37 &&
+        boardState[currentBlackYPos - 2][currentBlackXPos - 2] === "redPieceCheck"
+      ) {
+        boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+        boardStateCopy[currentBlackYPos - 1][currentBlackXPos - 1] = "black";
+        boardStateCopy[currentBlackYPos - 2][currentBlackXPos - 2] = "redPiece";
+      }
+
+      if (
+        duringTurn &&
+        event.keyCode === 39 &&
+        boardState[currentBlackYPos - 1][currentBlackXPos + 1] === "redPieceCheck"
+      ) {
+        boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+        boardStateCopy[currentBlackYPos - 1][currentBlackXPos + 1] = "redPiece";
+      }
+
+      if (
+        duringTurn &&
+        event.keyCode === 39 &&
+        boardState[currentBlackYPos - 2][currentBlackXPos + 2] === "redPieceCheck"
+      ) {
+        boardStateCopy[currentBlackYPos][currentBlackXPos] = "black";
+        boardStateCopy[currentBlackYPos - 1][currentBlackXPos + 1] = "black";
+        boardStateCopy[currentBlackYPos - 2][currentBlackXPos + 2] = "redPiece";
+      }
+      setBoardState(replaceGreyPieces(boardStateCopy));
+      setDuringTurn(false);
+      setPlayerTurn("black");
+    }
+
+    // setBoardState(replaceGreyPieces(boardStateCopy));
+    // setDuringTurn(false);
   };
 
   useEffect(() => {
@@ -158,8 +148,6 @@ const Board = () => {
     };
   }, []);
 
-  const moveSelectedPiece = (x, y) => {};
-
   const changeTurn = () => {
     if (playerTurn === "black") {
       setPlayerTurn("red");
@@ -168,7 +156,6 @@ const Board = () => {
     }
   };
 
-  const handleTurn = () => {};
   const showMoves = (y, x) => {
     const boardStateCopy = JSON.parse(JSON.stringify(boardState));
 
@@ -176,66 +163,126 @@ const Board = () => {
     let direction = "neutral";
 
     const inner = (y, x) => {
-      if (y < 7 && x > 0 && boardStateCopy[y + 1][x - 1] === "black" && !inJump) {
-        boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
-      }
+      if (playerTurn === "black") {
+        if (y < 7 && x > 0 && boardStateCopy[y + 1][x - 1] === "black" && !inJump) {
+          boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
+        }
 
-      if (y < 7 && x < 7 && boardStateCopy[y + 1][x + 1] === "black" && !inJump) {
-        boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
-      }
+        if (y < 7 && x < 7 && boardStateCopy[y + 1][x + 1] === "black" && !inJump) {
+          boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
+        }
 
-      if (y < 7 && x > 0 && boardStateCopy[y + 1][x - 1] === "redPiece" && !inJump) {
-        inJump = true;
-        direction = "left";
-        inner(y + 1, x - 1);
-      }
+        if (y < 7 && x > 0 && boardStateCopy[y + 1][x - 1] === "redPiece" && !inJump) {
+          inJump = true;
+          direction = "left";
+          inner(y + 1, x - 1);
+        }
 
-      if (y < 7 && x < 7 && boardStateCopy[y + 1][x + 1] === "redPiece" && !inJump) {
-        inJump = true;
-        direction = "right";
-        inner(y + 1, x + 1);
-      }
+        if (y < 7 && x < 7 && boardStateCopy[y + 1][x + 1] === "redPiece" && !inJump) {
+          inJump = true;
+          direction = "right";
+          inner(y + 1, x + 1);
+        }
 
-      if (
-        y < 7 &&
-        x < 7 &&
-        boardStateCopy[y + 1][x + 1] === "black" &&
-        inJump &&
-        direction !== "left"
-      ) {
-        inJump = false;
-        boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
-        return;
-      }
+        if (
+          y < 7 &&
+          x < 7 &&
+          boardStateCopy[y + 1][x + 1] === "black" &&
+          inJump &&
+          direction !== "left"
+        ) {
+          inJump = false;
+          boardStateCopy[y + 1][x + 1] = "blackPieceCheck";
+          return;
+        }
 
-      if (
-        y < 7 &&
-        x > 0 &&
-        boardStateCopy[y + 1][x - 1] === "black" &&
-        inJump &&
-        direction !== "right"
-      ) {
-        inJump = false;
-        boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
-        return;
-      }
+        if (
+          y < 7 &&
+          x > 0 &&
+          boardStateCopy[y + 1][x - 1] === "black" &&
+          inJump &&
+          direction !== "right"
+        ) {
+          inJump = false;
+          boardStateCopy[y + 1][x - 1] = "blackPieceCheck";
+          return;
+        }
 
-      if (y < 7 && x > 0 && boardStateCopy[y + 1][x - 1] === "blackPiece") {
-        return;
-      }
+        if (y < 7 && x > 0 && boardStateCopy[y + 1][x - 1] === "blackPiece") {
+          return;
+        }
 
-      if (y < 7 && x < 7 && boardStateCopy[y + 1][x + 1] === "blackPiece") {
-        return;
+        if (y < 7 && x < 7 && boardStateCopy[y + 1][x + 1] === "blackPiece") {
+          return;
+        }
+      } else if (playerTurn === "red") {
+        if (y > 0 && x > 0 && boardStateCopy[y - 1][x - 1] === "black" && !inJump) {
+          boardStateCopy[y - 1][x - 1] = "redPieceCheck";
+        }
+
+        if (y > 0 && x < 7 && boardStateCopy[y - 1][x + 1] === "black" && !inJump) {
+          boardStateCopy[y - 1][x + 1] = "redPieceCheck";
+        }
+
+        if (y > 0 && x > 0 && boardStateCopy[y - 1][x - 1] === "blackPiece" && !inJump) {
+          inJump = true;
+          direction = "left";
+          return inner(y - 1, x - 1);
+        }
+
+        if (y > 0 && x < 7 && boardStateCopy[y - 1][x + 1] === "blackPiece" && !inJump) {
+          inJump = true;
+          direction = "right";
+          return inner(y - 1, x + 1);
+        }
+
+        if (
+          y > 0 &&
+          x < 7 &&
+          boardStateCopy[y - 1][x + 1] === "black" &&
+          inJump &&
+          direction !== "left"
+        ) {
+          inJump = false;
+          boardStateCopy[y - 1][x + 1] = "redPieceCheck";
+          return;
+        }
+
+        if (
+          y < 7 &&
+          x > 0 &&
+          boardStateCopy[y - 1][x - 1] === "black" &&
+          inJump &&
+          direction !== "right"
+        ) {
+          inJump = false;
+          boardStateCopy[y - 1][x - 1] = "redPieceCheck";
+          return;
+        }
+
+        if (y < 7 && x > 0 && boardStateCopy[y - 1][x - 1] === "redPiece") {
+          return;
+        }
+
+        if (y < 7 && x < 7 && boardStateCopy[y - 1][x + 1] === "redPiece") {
+          return;
+        }
       }
     };
     inner(y, x);
+    console.log(boardStateCopy);
     setBoardState(boardStateCopy);
-    console.log(boardState);
   };
+
+  const handleResetPress = (event) => {
+    event.preventDefault()
+    setBoardState(initialBoardState);
+  }
 
   return (
     <div tabIndex="0" className="BoardContainer" onKeyDown={event => moveHandler(event)}>
       <h1>{playerTurn}</h1>
+      <button onClick={event => handleResetPress(event)}>Reset</button>
 
       {/* <h2>{currentBlackPos["y"]}</h2> */}
       {boardState.map((cell, index) => {
